@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_app/service/AuthenticationService.dart';
 import 'package:provider/provider.dart';
 

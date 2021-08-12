@@ -20,28 +20,50 @@ class SignInPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
-                    'SignIn Screen',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 18,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.normal),
-                  ),
+                  'SignIn Screen',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 18,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.normal),
+                ),
               ),
               emailTextFieldItem(),
               passwordTextFieldItem(),
-              ElevatedButton(
-                onPressed: () async {
-                  int valideteUser = await authService
-                      .signInWithEmailAndPassword(uEmail, uPwd);
-                  if (valideteUser == 0) {
-                    Navigator.pushNamed(context, '/home');
-                  } else {
-                    Navigator.pushNamed(context, '/signup');
-                  }
-                },
-                child: Text("Sign in"),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Expanded(
+                        child: ElevatedButton(
+                      onPressed: () async {
+                        int valideteUser = await authService
+                            .signInWithEmailAndPassword(uEmail, uPwd);
+                        if (valideteUser == 0) {
+                          Navigator.pushNamed(context, '/home');
+                        } else {
+                          _showAlertDialog(
+                              'Login Fail',
+                              'may be you are not register with our app or you enter wrrong credential',
+                              context);
+                        }
+                      },
+                      child: Text("Sign in"),
+                    )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Expanded(
+                        child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
+                      child: Text("Sign Up"),
+                    )),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -97,5 +119,23 @@ class SignInPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showAlertDialog(String title, String message, BuildContext context) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        ),
+      ],
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 }
